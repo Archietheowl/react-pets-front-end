@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react'
+import {Routes, Route} from 'react-router-dom'
 import { index } from './services/petService'
 
 // Components
-import PetList from './components/PetList'
+import PetList from './pages/PetList'
+import PetDetail from './pages/PetDetail'
+
 
 const App = () => {
   // ! State
   const [petList, setPetList] = useState([])
+  const [selected, setSelected] = useState(null)
   const [error, setError] = useState('')
+
 
   // ! On initial render (mount)
   // Make a call to the index route of our API
@@ -24,7 +29,16 @@ const App = () => {
     fetchPets()
   }, [])
 
-  return <PetList petList={petList} error={error} />
+  const updateSelected = (pet) => {
+    setSelected(pet)
+  }
+    return(
+
+        <Routes>
+          <Route path='/' element={ <PetList petList={petList} error={error} updateSelected={updateSelected}/>} />
+          <Route path='pets/:petId' element={<PetDetail selected={selected} /> } />
+        </Routes>
+    ) 
 }
 
 export default App
